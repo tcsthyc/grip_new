@@ -98,7 +98,8 @@
             "4800",
             "9600",
             "19200",
-            "38400"});
+            "38400",
+            "115200"});
             this.comboBox_baudRate.Location = new System.Drawing.Point(66, 20);
             this.comboBox_baudRate.Name = "comboBox_baudRate";
             this.comboBox_baudRate.Size = new System.Drawing.Size(121, 20);

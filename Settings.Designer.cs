@@ -104,7 +104,7 @@
             this.comboBox_baudRate.Name = "comboBox_baudRate";
             this.comboBox_baudRate.Size = new System.Drawing.Size(121, 20);
             this.comboBox_baudRate.TabIndex = 0;
-            this.comboBox_baudRate.Text = "9600";
+            this.comboBox_baudRate.Text = "115200";
             // 
             // comboBox_stopBits
             // 

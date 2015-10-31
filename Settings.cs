@@ -19,7 +19,10 @@ namespace GrippingTest
 
         private void Settings_Load(object sender, EventArgs e)
         {
-
+            comboBox_baudRate.Text = Form1.baudRate.ToString();
+            comboBox_bits.Text = Form1.dataBits.ToString();
+            comboBox_parity.Text = Form1.parity.ToString();
+            comboBox_stopBits.Text = Form1.stopBits.ToString();
         }
 
         private void btn_ok_Click(object sender, EventArgs e)

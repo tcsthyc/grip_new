@@ -36,34 +36,37 @@ namespace GrippingTest
 
         private Graphics g;
 
-        private float rangeY { get; set; }
-
-        private float rangeX { get; set; }
+        private DataPointViewConfig config;
 
         private float yPixelsPerTenKg;
 
         private float xPixelsPerSec;
+
+        private float paddingRight = 35;
+        private float paddingTop = 35;
+        private float paddingBottom = 25;
+        private float paddingLeft = 25;
 
 
         private int pointer { get; set; }
 
         private int screenCount;
 
-        public DataPointView(System.Windows.Forms.Timer timer, int bufferSize, System.Windows.Forms.PictureBox picBox, float timeSpan)
+        public DataPointView(System.Windows.Forms.Timer timer, System.Windows.Forms.PictureBox picBox, float timeSpan, DataPointViewConfig config)
         {
-            this.bufferSize = bufferSize;
             this.pointer = 0;
             this.screenCount = 0;
-            this.initList();
-            this.initBmp();
+            
             this.pictureBox = picBox;
             this.timeSpan = timeSpan;
-            this.rangeX = 60;
-            this.rangeY = 30;
+            this.config = config;
+            this.bufferSize = (int)(this.config.rangeX / timeSpan);
+            this.initList();
 
-            this.yPixelsPerTenKg = this.pictureBox.Height / this.rangeY * 10;
-            this.xPixelsPerSec = this.pictureBox.Width / this.rangeX;
+            this.yPixelsPerTenKg = (this.pictureBox.Height - this.paddingTop - this.paddingBottom) / this.config.rangeY * 10;
+            this.xPixelsPerSec = (this.pictureBox.Width - this.paddingLeft - this.paddingRight) / this.config.rangeX;
             
+            this.initBmp();
             timer.Tick += new EventHandler(refresh);
         }
 
@@ -96,7 +99,7 @@ namespace GrippingTest
             this.bmp = new System.Drawing.Bitmap(this.pictureBox.Width, this.pictureBox.Height);
             this.g = Graphics.FromImage(this.bmp);
             g.CompositingQuality = CompositingQuality.HighQuality;
-            g.TranslateTransform(25.0f, this.pictureBox.Height - 25f);
+            g.TranslateTransform(this.paddingLeft, this.pictureBox.Height - this.paddingBottom);
         }
 
         private void initList()
@@ -115,24 +118,31 @@ namespace GrippingTest
             Font textFont = new Font("Arial", 8);
             
             //add axis
-            g.DrawLine(blackPen, new Point(0, 0), new Point(this.pictureBox.Width - 35, 0));
-            g.DrawLine(blackPen, new Point(0, 0), new Point(0, 35 - this.pictureBox.Height));
+            g.DrawLine(blackPen, new PointF(0, 0), new PointF(this.pictureBox.Width - this.paddingRight, 0));
+            g.DrawLine(blackPen, new PointF(0, 0), new PointF(0, this.paddingTop - this.pictureBox.Height));
             //add text of axis
-            g.DrawString("Time(s)", textFont, textBrushBlack, new Point(this.pictureBox.Width - 70, -25));
+            g.DrawString("Time(s)", textFont, textBrushBlack, new PointF(this.pictureBox.Width - 70, -this.paddingLeft));
             g.DrawString("Force(kg)", textFont, textBrushBlack, new Point(10, 30 - this.pictureBox.Height));
             g.DrawString("0", textFont, textBrushBlack, new Point(-10, 0));
             //add graduation
             //y axis
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= this.config.rangeY/10; i++)
             {
                 g.DrawLine(blackPen, new PointF(0, -i * this.yPixelsPerTenKg), new PointF(5, -i * this.yPixelsPerTenKg));
                 g.DrawString((i * 10).ToString(), textFont, textBrushBlack, new PointF(-20, -i * this.yPixelsPerTenKg - 5));
             }
+
+            int realTime;
             //x axis
-            for (int i = 1; i <= this.rangeX; i++)
+            for (int i = 1; i <= this.config.rangeX; i++)
             {
                 g.DrawLine(blackPen, new PointF(this.xPixelsPerSec * i, 0), new PointF(this.xPixelsPerSec * i, -5));
-                g.DrawString(this.rangeX*this.screenCount + i.ToString(), textFont, textBrushBlack, new PointF(this.xPixelsPerSec * i - 5, 0));
+
+                realTime = this.config.rangeX*this.screenCount + i;
+                if (config.showXText)
+                {
+                    g.DrawString(realTime.ToString(), textFont, textBrushBlack, new PointF(this.xPixelsPerSec * i - 5 - ((int)(Math.Floor(Math.Log10(realTime)) + 1)) * 2.5f, 0));
+                }
             }
 
         }
@@ -140,9 +150,9 @@ namespace GrippingTest
         private void drawPoint()
         {
             float x, y;
-            for (int i = 0; i < this.points.Count; i++)
+            for (int i = 0; i < this.points.Count; i+=10)
             {
-                x = (points[i].X - this.screenCount * this.rangeX)*this.xPixelsPerSec;
+                x = points[i].X*this.xPixelsPerSec;
                 y = -points[i].Y/10f * this.yPixelsPerTenKg;
                 g.FillEllipse(pointBrush, new RectangleF(new PointF(x - 1, y - 1), new SizeF(2.0F, 2.0F)));
             }          

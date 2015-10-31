@@ -21,6 +21,22 @@ namespace GrippingTest
 {
     public partial class Form1 : Form
     {
+        //食指
+        private const int CH_INDEX_MIN = 100;
+        private const int CH_INDEX_MAX = 999;
+        
+        //中指
+        private const int CH_MIDDLE_MIN = 100;
+        private const int CH_MIDDLE_MAX = 550;
+
+        //无名指
+        private const int CH_RING_MIN = 100;
+        private const int CH_RING_MAX = 999;
+
+        //小指
+        private const int CH_LITTLE_MIN = 100;
+        private const int CH_LITTLE_MAX = 999;
+
         private bool connected;      
         private SerialPort sp;
         private String portName;
@@ -35,7 +51,7 @@ namespace GrippingTest
         private bool started;
 
         private float pointsPerSecond;
-        public static float dataTimeSpan=6.249f/1000;
+        public static float dataTimeSpan=1.448f/1000;
         private bool test1StartSoundPlayed;
         private System.Timers.Timer Test2EndTimer = new System.Timers.Timer();
 
@@ -45,7 +61,11 @@ namespace GrippingTest
         public static StopBits stopBits;
 
         private int errorCount;
-
+        private DataPointView dpvTotal;
+        private DataPointView dpvIndex;
+        private DataPointView dpvMiddle;
+        private DataPointView dpvRing;
+        private DataPointView dpvLittle;
 
         public Form1()
         {
@@ -74,7 +94,7 @@ namespace GrippingTest
             sp.ReadTimeout = 1000;
 
             refreshTimer = new System.Windows.Forms.Timer();
-            refreshTimer.Interval = 50;
+            refreshTimer.Interval = 40;
 
             pointsPerSecond = 1/dataTimeSpan;
 
@@ -163,7 +183,7 @@ namespace GrippingTest
                 }
                 else if (data[i] == '\r')
                 {
-                    Console.WriteLine(tempStringBuilder.ToString());
+                    //Console.WriteLine("str:"+tempStringBuilder.ToString());
                     if (!started)
                     {
                         if (tempStringBuilder.ToString().Contains("Start"))
@@ -179,14 +199,16 @@ namespace GrippingTest
                     GripData gd = new GripData();
                     try
                     {
-                        gd.index = float.Parse(values[0]);
-                        gd.middle = float.Parse(values[1]);
-                        gd.ring = float.Parse(values[2]);
-                        gd.little = float.Parse(values[3]);
+                        gd.index = mapForceValue(CH_INDEX_MIN, CH_INDEX_MAX, float.Parse(values[0]));
+                        gd.middle = mapForceValue(CH_MIDDLE_MIN, CH_MIDDLE_MAX, float.Parse(values[1]));
+                        gd.ring = mapForceValue(CH_RING_MIN, CH_RING_MAX, float.Parse(values[2]));
+                        gd.little = mapForceValue(CH_LITTLE_MIN, CH_LITTLE_MAX, float.Parse(values[3]));
+                        gd.total = gd.index + gd.middle + gd.ring + gd.little;
                         dataRecord.Add(gd);
                     }
                     catch
                     {
+                        //出错则使用上一行数据作为本行数据，同时error计数+1
                         int id = dataRecord.Count - 1;
                         if (id < 1)
                         {
@@ -194,6 +216,7 @@ namespace GrippingTest
                             gd.middle = 0;
                             gd.ring = 0;
                             gd.little = 0;
+                            gd.total = 0;
                         }
                         else
                         {
@@ -201,14 +224,26 @@ namespace GrippingTest
                             gd.middle = dataRecord[id].middle;
                             gd.ring = dataRecord[id].ring;
                             gd.little = dataRecord[id].little;
+                            gd.total = dataRecord[id].total;
                         }
                         dataRecord.Add(gd);
                         errorCount++;
                     }
+
+                    dpvTotal.pushData(gd.total);
+                    dpvIndex.pushData(gd.index);
+                    dpvMiddle.pushData(gd.middle);
+                    dpvRing.pushData(gd.ring);
+                    dpvLittle.pushData(gd.little);
                
                     tempStringBuilder.Clear();
                 }
             }
+        }
+
+        private float mapForceValue(float min, float max, float val)
+        {
+            return (val - min) / (max - min) * 20;
         }
 
         private void saveData()
@@ -283,7 +318,9 @@ namespace GrippingTest
                     comboBoxPorts.Enabled = false;
                 }
 
-                new DataPointView(refreshTimer, 6000, pbIndex, dataTimeSpan);
+                initDpv();
+
+                refreshTimer.Start();
 
                 test1StartSoundPlayed = false;
 
@@ -339,6 +376,15 @@ namespace GrippingTest
                 comboBoxPorts.Enabled = true;
                 buttonStart.Text = "开始";
             }
+        }
+
+        private void initDpv()
+        {
+            dpvTotal = new DataPointView(refreshTimer, pbTotal, dataTimeSpan, new DataPointViewConfig(60, 80, true, true));
+            dpvIndex = new DataPointView(refreshTimer, pbIndex, dataTimeSpan, new DataPointViewConfig(30, 20, false, true));
+            dpvMiddle = new DataPointView(refreshTimer, pbMiddle, dataTimeSpan, new DataPointViewConfig(30, 20, false, true));
+            dpvRing = new DataPointView(refreshTimer, pbRing, dataTimeSpan, new DataPointViewConfig(30, 20, false, true));
+            dpvLittle = new DataPointView(refreshTimer, pbLittle, dataTimeSpan, new DataPointViewConfig(30, 20, false, true));
         }
 
         private void buttonStop_Click(object sender, EventArgs e)

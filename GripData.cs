@@ -11,5 +11,7 @@ namespace GrippingTest
         public float middle { get; set; }
         public float ring { get; set; }
         public float little { get; set; }
+
+        public float total { get; set; }
     }
 }

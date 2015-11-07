@@ -14,7 +14,6 @@ using System.Drawing.Text;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Media;
-using System.Windows.Forms;
 
 
 namespace GrippingTest
@@ -67,14 +66,16 @@ namespace GrippingTest
         private DataPointView dpvRing;
         private DataPointView dpvLittle;
 
+        public AssistLineStratogy stratogy { get; set; }
+
         public Form1()
         {
-            InitializeComponent();          
-            
+            InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            stratogy = new AssistLineStratogy();
             userName = "";
             dataRecord = new List<GripData>();
             perRecord = new ArrayList();          
@@ -130,8 +131,6 @@ namespace GrippingTest
             }
 
         }
-
-      
 
         private void setSerialPort()
         {
@@ -396,6 +395,25 @@ namespace GrippingTest
         {
             Settings settingForm = new Settings();
             settingForm.ShowDialog();
-        }   
+        }
+
+        private void buttonAddAssistLine_Click(object sender, EventArgs e)
+        {
+            FunctionMaker fm = new FunctionMaker();
+            fm.formInstance = this;
+            fm.ShowDialog(this);
+        }
+
+        public void refreshStratogy()
+        {
+            textBoxStratogy.Text = stratogy.toString();
+        }
+
+        private void buttonDelLastLine_Click(object sender, EventArgs e)
+        {
+            if (stratogy.sections.Count == 0) return;
+            stratogy.sections.RemoveAt(stratogy.sections.Count - 1);
+            refreshStratogy();
+        }
     }
 }

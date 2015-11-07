@@ -42,10 +42,12 @@
             this.gb1 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.textBoxStratogy = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.buttonAddAssistLine = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.buttonDelLastLine = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbTotal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbIndex)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbMiddle)).BeginInit();
@@ -180,9 +182,11 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.buttonDelLastLine);
+            this.groupBox2.Controls.Add(this.textBoxStratogy);
             this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.button2);
-            this.groupBox2.Controls.Add(this.button1);
+            this.groupBox2.Controls.Add(this.buttonAddAssistLine);
             this.groupBox2.Location = new System.Drawing.Point(1053, 176);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(245, 341);
@@ -190,36 +194,58 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "函数";
             // 
-            // button1
+            // textBoxStratogy
             // 
-            this.button1.Location = new System.Drawing.Point(164, 20);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "添加";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(8, 20);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "载入方案";
-            this.button2.UseVisualStyleBackColor = true;
+            this.textBoxStratogy.Location = new System.Drawing.Point(8, 76);
+            this.textBoxStratogy.Multiline = true;
+            this.textBoxStratogy.Name = "textBoxStratogy";
+            this.textBoxStratogy.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxStratogy.Size = new System.Drawing.Size(228, 259);
+            this.textBoxStratogy.TabIndex = 2;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(86, 20);
+            this.button3.Enabled = false;
+            this.button3.Location = new System.Drawing.Point(131, 20);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(105, 23);
             this.button3.TabIndex = 1;
             this.button3.Text = "保存方案";
             this.button3.UseVisualStyleBackColor = true;
             // 
+            // button2
+            // 
+            this.button2.Enabled = false;
+            this.button2.Location = new System.Drawing.Point(8, 20);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(117, 23);
+            this.button2.TabIndex = 1;
+            this.button2.Text = "载入方案";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // buttonAddAssistLine
+            // 
+            this.buttonAddAssistLine.Location = new System.Drawing.Point(8, 49);
+            this.buttonAddAssistLine.Name = "buttonAddAssistLine";
+            this.buttonAddAssistLine.Size = new System.Drawing.Size(117, 23);
+            this.buttonAddAssistLine.TabIndex = 0;
+            this.buttonAddAssistLine.Text = "添加辅助线";
+            this.buttonAddAssistLine.UseVisualStyleBackColor = true;
+            this.buttonAddAssistLine.Click += new System.EventHandler(this.buttonAddAssistLine_Click);
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // buttonDelLastLine
+            // 
+            this.buttonDelLastLine.Location = new System.Drawing.Point(131, 49);
+            this.buttonDelLastLine.Name = "buttonDelLastLine";
+            this.buttonDelLastLine.Size = new System.Drawing.Size(105, 23);
+            this.buttonDelLastLine.TabIndex = 3;
+            this.buttonDelLastLine.Text = "删除最后一条";
+            this.buttonDelLastLine.UseVisualStyleBackColor = true;
+            this.buttonDelLastLine.Click += new System.EventHandler(this.buttonDelLastLine_Click);
             // 
             // Form1
             // 
@@ -245,6 +271,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -265,10 +292,12 @@
         private System.Windows.Forms.GroupBox gb1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonAddAssistLine;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.TextBox textBoxStratogy;
+        private System.Windows.Forms.Button buttonDelLastLine;
     }
 }
 

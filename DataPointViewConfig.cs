@@ -5,12 +5,14 @@ using System.Text;
 
 namespace GrippingTest
 {
-    class DataPointViewConfig
+    public class DataPointViewConfig
     {
         public int rangeX { get; set; }
         public int rangeY { get; set; }
         public bool showXText { get; set; }
         public bool showYText { get; set; }
+
+        public AssistLineStratogy alStratogy { get; set; }
 
         public DataPointViewConfig()
         {

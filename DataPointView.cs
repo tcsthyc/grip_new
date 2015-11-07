@@ -14,6 +14,7 @@ using System.Drawing.Text;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Media;
+using NCalc;
 
 
 namespace GrippingTest
@@ -24,6 +25,7 @@ namespace GrippingTest
         private static Pen whitePen = new Pen(Color.White);
         private static Pen blackPen = new Pen(Color.Black);
         private static Brush pointBrush = new SolidBrush(Color.Blue);
+        private static Brush assistLineBrush = new SolidBrush(Color.LightGray);
 
         private int bufferSize { get; set; }
         private List<PointF> points { get; set; }
@@ -52,16 +54,20 @@ namespace GrippingTest
 
         private int screenCount;
 
+        private List<List<PointF>> strategyCache;
+
         public DataPointView(System.Windows.Forms.Timer timer, System.Windows.Forms.PictureBox picBox, float timeSpan, DataPointViewConfig config)
         {
             this.pointer = 0;
             this.screenCount = 0;
+            this.strategyCache = new List<List<PointF>>();
             
             this.pictureBox = picBox;
             this.timeSpan = timeSpan;
             this.config = config;
             this.bufferSize = (int)(this.config.rangeX / timeSpan);
             this.initList();
+            this.calAssistLineCache();
 
             this.yPixelsPerTenKg = (this.pictureBox.Height - this.paddingTop - this.paddingBottom) / this.config.rangeY * 10;
             this.xPixelsPerSec = (this.pictureBox.Width - this.paddingLeft - this.paddingRight) / this.config.rangeX;
@@ -78,6 +84,7 @@ namespace GrippingTest
             {
                 this.pointer = 0;
                 this.screenCount++;
+                this.calAssistLineCache();
             }
             else
             {
@@ -89,7 +96,9 @@ namespace GrippingTest
                                           EventArgs myEventArgs)
         {
             this.drawAxis();
+            this.drawAssistLine();
             this.drawPoint();
+            
             this.g.Flush();
             this.pictureBox.Image = this.bmp;
         }
@@ -111,6 +120,49 @@ namespace GrippingTest
             }
         }
 
+        private void drawAssistLine()
+        {
+            foreach (List<PointF> line in strategyCache)
+            {
+                foreach (PointF point in line)
+                {
+                    g.FillEllipse(assistLineBrush, new RectangleF(point, new SizeF(2.0F, 2.0F)));
+                }
+            }
+        }
+
+        private void calAssistLineCache()
+        {
+            if(config.alStratogy == null || config.alStratogy.sections.Count == 0) return;
+
+            float tPerPixel = 1 / xPixelsPerSec;
+            float startTime = config.rangeX * screenCount;
+
+            strategyCache.Clear();
+            for(int lineCount=0;lineCount<config.alStratogy.sections.Count;lineCount++){
+                try{
+                    List<PointF> assistLineCacheList = new List<PointF>();
+                    AssistLineSecion assistLine = config.alStratogy.sections[lineCount];
+                    String expressionText = assistLine.expression;
+                    
+                    for (int i = 0; i < bufferSize; i += 2)
+                    {
+                        float realTime = startTime + i;
+                        if (realTime < assistLine.start || realTime > assistLine.end)
+                        {
+                            continue;
+                        }
+
+                        Expression ex = new Expression(expressionText.Replace("t", realTime.ToString()));
+                        assistLineCacheList.Add(new PointF(i,(float)ex.Evaluate()));
+                    }
+                    strategyCache.Add(assistLineCacheList);
+                }
+                catch{
+
+                }
+            }
+        }
         private void drawAxis()
         {
             g.Clear(Color.White);

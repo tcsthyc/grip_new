@@ -5,12 +5,32 @@ using System.Text;
 
 namespace GrippingTest
 {
-    class AssistLineStratogy
+    public class AssistLineStratogy
     {
-        public String lineFunc { get; set; }
+        //策略名
+        public String name;
 
-        public float start { get; set; }
+        //当前策略所有辅助线集合
+        public List<AssistLineSecion> sections { get; set; }
 
-        public float end { get; set; }
+        public AssistLineStratogy()
+        {
+            this.sections = new List<AssistLineSecion>();
+            this.name = "";
+        }
+
+        public String toString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(this.name);
+            sb.Append(Environment.NewLine);
+            foreach (AssistLineSecion als in sections)
+            {
+                sb.Append(als.expression + "," + als.start + "," +als.end + Environment.NewLine);
+            }
+
+            return sb.ToString();
+        }
+    
     }
 }

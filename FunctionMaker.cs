@@ -72,7 +72,15 @@ namespace GrippingTest
             als.expression = textBoxExp.Text;
             als.start = float.Parse(textBoxRangeStart.Text);
             als.end = float.Parse(textBoxRangeEnd.Text);
-            formInstance.stratogy.sections.Add(als);
+            try
+            {
+                als.xPixelSpan = float.Parse(textBoxXSpan.Text);
+            }
+            catch
+            {
+                als.xPixelSpan = 2;
+            }
+            formInstance.strategy.sections.Add(als);
             formInstance.refreshStratogy();
         }
     }

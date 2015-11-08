@@ -41,13 +41,13 @@
             this.buttonSerialSettings = new System.Windows.Forms.Button();
             this.gb1 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBoxStrategy = new System.Windows.Forms.GroupBox();
+            this.buttonDelLastLine = new System.Windows.Forms.Button();
             this.textBoxStratogy = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.buttonAddAssistLine = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.buttonDelLastLine = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbTotal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbIndex)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbMiddle)).BeginInit();
@@ -55,7 +55,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbLittle)).BeginInit();
             this.gb1.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.groupBoxStrategy.SuspendLayout();
             this.SuspendLayout();
             // 
             // pbTotal
@@ -180,19 +180,29 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "测试";
             // 
-            // groupBox2
+            // groupBoxStrategy
             // 
-            this.groupBox2.Controls.Add(this.buttonDelLastLine);
-            this.groupBox2.Controls.Add(this.textBoxStratogy);
-            this.groupBox2.Controls.Add(this.button3);
-            this.groupBox2.Controls.Add(this.button2);
-            this.groupBox2.Controls.Add(this.buttonAddAssistLine);
-            this.groupBox2.Location = new System.Drawing.Point(1053, 176);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(245, 341);
-            this.groupBox2.TabIndex = 9;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "函数";
+            this.groupBoxStrategy.Controls.Add(this.buttonDelLastLine);
+            this.groupBoxStrategy.Controls.Add(this.textBoxStratogy);
+            this.groupBoxStrategy.Controls.Add(this.button3);
+            this.groupBoxStrategy.Controls.Add(this.button2);
+            this.groupBoxStrategy.Controls.Add(this.buttonAddAssistLine);
+            this.groupBoxStrategy.Location = new System.Drawing.Point(1053, 176);
+            this.groupBoxStrategy.Name = "groupBoxStrategy";
+            this.groupBoxStrategy.Size = new System.Drawing.Size(245, 341);
+            this.groupBoxStrategy.TabIndex = 9;
+            this.groupBoxStrategy.TabStop = false;
+            this.groupBoxStrategy.Text = "函数";
+            // 
+            // buttonDelLastLine
+            // 
+            this.buttonDelLastLine.Location = new System.Drawing.Point(131, 49);
+            this.buttonDelLastLine.Name = "buttonDelLastLine";
+            this.buttonDelLastLine.Size = new System.Drawing.Size(105, 23);
+            this.buttonDelLastLine.TabIndex = 3;
+            this.buttonDelLastLine.Text = "删除最后一条";
+            this.buttonDelLastLine.UseVisualStyleBackColor = true;
+            this.buttonDelLastLine.Click += new System.EventHandler(this.buttonDelLastLine_Click);
             // 
             // textBoxStratogy
             // 
@@ -237,20 +247,10 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // buttonDelLastLine
-            // 
-            this.buttonDelLastLine.Location = new System.Drawing.Point(131, 49);
-            this.buttonDelLastLine.Name = "buttonDelLastLine";
-            this.buttonDelLastLine.Size = new System.Drawing.Size(105, 23);
-            this.buttonDelLastLine.TabIndex = 3;
-            this.buttonDelLastLine.Text = "删除最后一条";
-            this.buttonDelLastLine.UseVisualStyleBackColor = true;
-            this.buttonDelLastLine.Click += new System.EventHandler(this.buttonDelLastLine_Click);
-            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1329, 534);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBoxStrategy);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gb1);
             this.Controls.Add(this.pbLittle);
@@ -270,8 +270,8 @@
             this.gb1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.groupBoxStrategy.ResumeLayout(false);
+            this.groupBoxStrategy.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -291,7 +291,7 @@
         private System.Windows.Forms.Button buttonSerialSettings;
         private System.Windows.Forms.GroupBox gb1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBoxStrategy;
         private System.Windows.Forms.Button buttonAddAssistLine;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;

@@ -85,6 +85,7 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="TimePeriod.cs" />
     <Compile Include="ViewDataForm.cs">
       <SubType>Form</SubType>
     </Compile>

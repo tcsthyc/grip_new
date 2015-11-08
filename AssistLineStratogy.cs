@@ -26,7 +26,7 @@ namespace GrippingTest
             sb.Append(Environment.NewLine);
             foreach (AssistLineSecion als in sections)
             {
-                sb.Append(als.expression + "," + als.start + "," +als.end + Environment.NewLine);
+                sb.Append(als.expression + "," + als.start + "," + als.end + "," + als.xPixelSpan + Environment.NewLine);
             }
 
             return sb.ToString();

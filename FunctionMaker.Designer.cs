@@ -43,7 +43,7 @@
             this.textBoxTestInput = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxXSpan = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -179,25 +179,25 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(24, 240);
+            this.label7.Location = new System.Drawing.Point(24, 243);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(41, 12);
+            this.label7.Size = new System.Drawing.Size(77, 12);
             this.label7.TabIndex = 6;
-            this.label7.Text = "color:";
+            this.label7.Text = "横轴像素间隔";
             // 
-            // textBox1
+            // textBoxXSpan
             // 
-            this.textBox1.Location = new System.Drawing.Point(84, 240);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(188, 21);
-            this.textBox1.TabIndex = 7;
+            this.textBoxXSpan.Location = new System.Drawing.Point(107, 240);
+            this.textBoxXSpan.Name = "textBoxXSpan";
+            this.textBoxXSpan.Size = new System.Drawing.Size(165, 21);
+            this.textBoxXSpan.TabIndex = 7;
             // 
             // FunctionMaker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(286, 424);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBoxXSpan);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonOK);
@@ -234,6 +234,6 @@
         private System.Windows.Forms.TextBox textBoxTestInput;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxXSpan;
     }
 }

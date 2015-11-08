@@ -66,12 +66,11 @@ namespace GrippingTest
             this.timeSpan = timeSpan;
             this.config = config;
             this.bufferSize = (int)(this.config.rangeX / timeSpan);
-            this.initList();
-            this.calAssistLineCache();
-
             this.yPixelsPerTenKg = (this.pictureBox.Height - this.paddingTop - this.paddingBottom) / this.config.rangeY * 10;
             this.xPixelsPerSec = (this.pictureBox.Width - this.paddingLeft - this.paddingRight) / this.config.rangeX;
-            
+
+            this.initList();
+            this.calAssistLineCache();          
             this.initBmp();
             timer.Tick += new EventHandler(refresh);
         }
@@ -143,18 +142,17 @@ namespace GrippingTest
                 try{
                     List<PointF> assistLineCacheList = new List<PointF>();
                     AssistLineSecion assistLine = config.alStratogy.sections[lineCount];
+                    TimePeriod tp = joinTime(new TimePeriod(assistLine.start,assistLine.end), new TimePeriod(config.rangeX * screenCount, config.rangeX *(screenCount + 1)));
+                    if (tp == null) continue;
+                    int startPixel = (int)((tp.start - config.rangeX * screenCount) * xPixelsPerSec);
+                    int endPixel = (int)((tp.end - config.rangeX * screenCount) * xPixelsPerSec);
                     String expressionText = assistLine.expression;
                     
-                    for (int i = 0; i < bufferSize; i += 2)
+                    for (float i = startPixel; i < endPixel; i += assistLine.xPixelSpan)
                     {
-                        float realTime = startTime + i;
-                        if (realTime < assistLine.start || realTime > assistLine.end)
-                        {
-                            continue;
-                        }
-
+                        float realTime = startTime + i/xPixelsPerSec;
                         Expression ex = new Expression(expressionText.Replace("t", realTime.ToString()));
-                        assistLineCacheList.Add(new PointF(i,(float)ex.Evaluate()));
+                        assistLineCacheList.Add(new PointF(i,-yPixelsPerTenKg/10 * float.Parse(ex.Evaluate().ToString())));
                     }
                     strategyCache.Add(assistLineCacheList);
                 }
@@ -208,6 +206,17 @@ namespace GrippingTest
                 y = -points[i].Y/10f * this.yPixelsPerTenKg;
                 g.FillEllipse(pointBrush, new RectangleF(new PointF(x - 1, y - 1), new SizeF(2.0F, 2.0F)));
             }          
+        }
+
+        public TimePeriod joinTime(TimePeriod tp1, TimePeriod tp2)
+        {
+            if (tp1.start >= tp1.end || tp2.start>=tp2.end) return null;
+
+            float start = Math.Max(tp1.start, tp2.start);
+            float end = Math.Min(tp1.end, tp2.end);
+
+            if (start >= end) return null;
+            return new TimePeriod(start, end);
         }
     }
 }

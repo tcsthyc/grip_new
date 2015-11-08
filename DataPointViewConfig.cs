@@ -29,5 +29,14 @@ namespace GrippingTest
             this.showXText = showXText;
             this.showYText = showYText;
         }
+
+        public DataPointViewConfig(int rx, int ry, bool showXText, bool showYText, AssistLineStratogy als)
+        {
+            this.rangeX = rx;
+            this.rangeY = ry;
+            this.showXText = showXText;
+            this.showYText = showYText;
+            this.alStratogy = als;
+        }
     }
 }

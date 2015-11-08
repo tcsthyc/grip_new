@@ -23,8 +23,8 @@ namespace GrippingTest
         public float end;
 
         /**
-         * @deprecated
+         * 相邻两点间横轴像素间隔
          */
-        public System.Drawing.Color color;
+        public float xPixelSpan;
     }
 }

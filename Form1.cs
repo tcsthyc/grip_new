@@ -66,7 +66,7 @@ namespace GrippingTest
         private DataPointView dpvRing;
         private DataPointView dpvLittle;
 
-        public AssistLineStratogy stratogy { get; set; }
+        public AssistLineStratogy strategy { get; set; }
 
         public Form1()
         {
@@ -75,7 +75,7 @@ namespace GrippingTest
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            stratogy = new AssistLineStratogy();
+            strategy = new AssistLineStratogy();
             userName = "";
             dataRecord = new List<GripData>();
             perRecord = new ArrayList();          
@@ -307,6 +307,7 @@ namespace GrippingTest
         {
             if (!connected)
             {
+                groupBoxStrategy.Enabled = false;
                 dataRecord.Clear();
                 errorCount = 0;
                 started = false;
@@ -342,6 +343,7 @@ namespace GrippingTest
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.ToString(), "异常");
+                    groupBoxStrategy.Enabled = true;
                     return;
                 }
                 connected = true;
@@ -374,16 +376,17 @@ namespace GrippingTest
                 dataRecord.Clear();
                 comboBoxPorts.Enabled = true;
                 buttonStart.Text = "开始";
+                groupBoxStrategy.Enabled = true;
             }
         }
 
         private void initDpv()
         {
-            dpvTotal = new DataPointView(refreshTimer, pbTotal, dataTimeSpan, new DataPointViewConfig(60, 80, true, true));
-            dpvIndex = new DataPointView(refreshTimer, pbIndex, dataTimeSpan, new DataPointViewConfig(30, 20, false, true));
-            dpvMiddle = new DataPointView(refreshTimer, pbMiddle, dataTimeSpan, new DataPointViewConfig(30, 20, false, true));
-            dpvRing = new DataPointView(refreshTimer, pbRing, dataTimeSpan, new DataPointViewConfig(30, 20, false, true));
-            dpvLittle = new DataPointView(refreshTimer, pbLittle, dataTimeSpan, new DataPointViewConfig(30, 20, false, true));
+            dpvTotal = new DataPointView(refreshTimer, pbTotal, dataTimeSpan, new DataPointViewConfig(60, 80, true, true, strategy));
+            dpvIndex = new DataPointView(refreshTimer, pbIndex, dataTimeSpan, new DataPointViewConfig(30, 20, false, true, strategy));
+            dpvMiddle = new DataPointView(refreshTimer, pbMiddle, dataTimeSpan, new DataPointViewConfig(30, 20, false, true, strategy));
+            dpvRing = new DataPointView(refreshTimer, pbRing, dataTimeSpan, new DataPointViewConfig(30, 20, false, true, strategy));
+            dpvLittle = new DataPointView(refreshTimer, pbLittle, dataTimeSpan, new DataPointViewConfig(30, 20, false, true, strategy));
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
@@ -406,13 +409,13 @@ namespace GrippingTest
 
         public void refreshStratogy()
         {
-            textBoxStratogy.Text = stratogy.toString();
+            textBoxStratogy.Text = strategy.toString();
         }
 
         private void buttonDelLastLine_Click(object sender, EventArgs e)
         {
-            if (stratogy.sections.Count == 0) return;
-            stratogy.sections.RemoveAt(stratogy.sections.Count - 1);
+            if (strategy.sections.Count == 0) return;
+            strategy.sections.RemoveAt(strategy.sections.Count - 1);
             refreshStratogy();
         }
     }

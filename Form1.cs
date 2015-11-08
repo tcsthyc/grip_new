@@ -22,19 +22,19 @@ namespace GrippingTest
     {
         //食指
         private const int CH_INDEX_MIN = 100;
-        private const int CH_INDEX_MAX = 999;
+        private const float RATE_INDEX = 1;
         
         //中指
         private const int CH_MIDDLE_MIN = 100;
-        private const int CH_MIDDLE_MAX = 550;
+        private const float RATE_MIDDLE = 1;
 
         //无名指
         private const int CH_RING_MIN = 100;
-        private const int CH_RING_MAX = 999;
+        private const float RATE_RING = 1;
 
         //小指
         private const int CH_LITTLE_MIN = 100;
-        private const int CH_LITTLE_MAX = 999;
+        private const float RATE_LITTLE = 1;
 
         private bool connected;      
         private SerialPort sp;
@@ -198,10 +198,10 @@ namespace GrippingTest
                     GripData gd = new GripData();
                     try
                     {
-                        gd.index = mapForceValue(CH_INDEX_MIN, CH_INDEX_MAX, float.Parse(values[0]));
-                        gd.middle = mapForceValue(CH_MIDDLE_MIN, CH_MIDDLE_MAX, float.Parse(values[1]));
-                        gd.ring = mapForceValue(CH_RING_MIN, CH_RING_MAX, float.Parse(values[2]));
-                        gd.little = mapForceValue(CH_LITTLE_MIN, CH_LITTLE_MAX, float.Parse(values[3]));
+                        gd.index = mapForceValue(CH_INDEX_MIN, RATE_INDEX, float.Parse(values[0]));
+                        gd.middle = mapForceValue(CH_MIDDLE_MIN, RATE_MIDDLE, float.Parse(values[1]));
+                        gd.ring = mapForceValue(CH_RING_MIN, RATE_RING, float.Parse(values[2]));
+                        gd.little = mapForceValue(CH_LITTLE_MIN, RATE_LITTLE, float.Parse(values[3]));
                         gd.total = gd.index + gd.middle + gd.ring + gd.little;
                         dataRecord.Add(gd);
                     }
@@ -240,9 +240,9 @@ namespace GrippingTest
             }
         }
 
-        private float mapForceValue(float min, float max, float val)
+        private float mapForceValue(float min, float rate, float val)
         {
-            return (val - min) / (max - min) * 20;
+            return rate * (val - min);
         }
 
         private void saveData()
